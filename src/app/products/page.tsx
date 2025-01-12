@@ -8,9 +8,14 @@ type Product = {
 };
 
 export default async function ProductPage() {
- const response = await fetch('http://localhost:3001/products');
-
+ const response = await fetch('http://localhost:3001/products', {
+  cache: 'no-store',
+ });
  const products = await response.json();
+
+ const detailsResponse = await fetch('http://localhost:3001/products/1');
+ const productDetail = await detailsResponse.json();
+
  return (
   <ul className='space-y-4 p-4'>
    {products.map((product: Product) => (
@@ -23,6 +28,7 @@ export default async function ProductPage() {
      </h2>
      <p>{product.description}</p>
      <p className='text-lg font-medium'>${product.price}</p>
+     <p>{productDetail.price}</p>
     </li>
    ))}
   </ul>

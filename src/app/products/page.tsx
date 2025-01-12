@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import { cookies } from 'next/headers';
 type Product = {
  id: number;
  title: string;
@@ -8,11 +8,12 @@ type Product = {
 };
 
 export default async function ProductPage() {
- const response = await fetch('http://localhost:3001/products', {
-  cache: 'no-store',
- });
+ const response = await fetch('http://localhost:3001/products');
  const products = await response.json();
 
+ const cookieStore = cookies();
+ const theme = (await cookieStore).get('theme');
+ //next.js will not cache request after dynamic functions were invoked
  const detailsResponse = await fetch('http://localhost:3001/products/1');
  const productDetail = await detailsResponse.json();
 

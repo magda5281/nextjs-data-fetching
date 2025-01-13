@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
+// import { cookies } from 'next/headers';
 type Product = {
  id: number;
  title: string;
@@ -8,14 +8,18 @@ type Product = {
 };
 
 export default async function ProductPage() {
- const response = await fetch('http://localhost:3001/products');
+ const response = await fetch('http://localhost:3001/products', {
+  next: {
+   revalidate: 10,
+  },
+ });
  const products = await response.json();
 
- const cookieStore = cookies();
- const theme = (await cookieStore).get('theme');
- //next.js will not cache request after dynamic functions were invoked
- const detailsResponse = await fetch('http://localhost:3001/products/1');
- const productDetail = await detailsResponse.json();
+ //  const cookieStore = cookies();
+ //  const theme = (await cookieStore).get('theme');
+ //  //next.js will not cache request after dynamic functions were invoked
+ //  const detailsResponse = await fetch('http://localhost:3001/products/1');
+ //  const productDetail = await detailsResponse.json();
 
  return (
   <ul className='space-y-4 p-4'>
@@ -29,7 +33,7 @@ export default async function ProductPage() {
      </h2>
      <p>{product.description}</p>
      <p className='text-lg font-medium'>${product.price}</p>
-     <p>{productDetail.price}</p>
+     {/* <p>{productDetail.price}</p> */}
     </li>
    ))}
   </ul>
